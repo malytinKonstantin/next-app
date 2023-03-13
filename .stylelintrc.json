@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-order-config-standard",
+    "stylelint-config-recommended",
+    "stylelint-config-styled-components"
+  ],
+  "plugins": ["stylelint-order"],
+  "customSyntax": "@stylelint/postcss-css-in-js",
+  "rules": {
+    "no-descending-specificity": null,
+    "declaration-empty-line-before": null,
+    "no-missing-end-of-source-newline": null,
+    "color-hex-case": "upper",
+    "block-no-empty": null
+  }
+}

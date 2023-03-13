@@ -1,0 +1,63 @@
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - install
+  - lint
+  - build
+  - deploy
+
+Install:
+  stage: install
+  image: node
+  needs: []
+  script:
+    - echo "Start install deps"
+    - npm install
+    - echo "Install deps successfully!"
+
+Lint:
+  stage: lint
+  image: node
+  script:
+    - echo "Start linting App"
+    - npm run lint
+    - echo "Lint successfully!"
+
+Build:
+  stage: build
+  image: node
+  script:
+    - echo "Start building App"
+    - npm run build-storybook
+    - npm run build
+    - echo "Build successfully!"
+  cache:
+    paths:
+      - .next/
+
+Deploy:
+  stage: deploy
+  image: node
+  variables:
+    VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
+    VERCEL_ORG_ID: $VERCEL_ORG_ID
+    VERCEL_ACCESS_TOKEN: $VERCEL_ACCESS_TOKEN
+
+  script:
+    - npm i -g vercel
+    - vercel pull --yes --environment=production --token=$VERCEL_ACCESS_TOKEN
+    - vercel build --prod --token=$VERCEL_ACCESS_TOKEN
+    - vercel deploy --prebuilt --prod --token=$VERCEL_ACCESS_TOKEN
+
+  only:
+    - main
+# test:
+# stage: test
+# image: node
+# script:
+# - echo "Testing App"
+# - npm install
+# - CI=true npm test
+# - echo "Test successfully!"
